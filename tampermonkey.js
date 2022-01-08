@@ -4,7 +4,7 @@
 // @version      __APP_VERSION__
 // @description  更方便的使用 WebVPN，允许访问其他校内地址
 // @author       KAAAsS
-// @icon         data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==
+// @icon         https://webvpn.jlu.edu.cn/favicon.ico
 // @match        https://webvpn.jlu.edu.cn/
 // @grant        GM_setValue
 // @grant        GM_getValue
