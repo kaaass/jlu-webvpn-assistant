@@ -9,7 +9,7 @@
             class="input-with-select"
             @keyup.enter.native="handleJumpUrl()"
         >
-          <el-button slot="append" icon="el-icon-connection" @click="handleJumpUrl()"></el-button>
+          <el-button slot="append" icon="el-icon-arrow-right" @click="handleJumpUrl()"></el-button>
         </el-input>
       </div>
       <div class="blank"></div>
@@ -18,6 +18,7 @@
 </template>
 
 <script>
+import {encryptVpnUrl} from '@/logic';
 
 export default {
   name: "PluginPanel",
@@ -29,7 +30,20 @@ export default {
 
   methods: {
     handleJumpUrl() {
-      this.$message.success("正在跳转...");
+      // 空检查
+      if (!this.goUrl) {
+        this.$message.error('请输入要跳转的链接！');
+        return;
+      }
+      // 编码
+      const encryptedUrl = encryptVpnUrl(this.goUrl);
+      if (encryptedUrl) {
+        this.goUrl = '';
+        window.open(encryptedUrl);
+        this.$message.success("正在跳转...");
+      } else {
+        this.$message.error("未知错误");
+      }
     },
   }
 }
