@@ -86,7 +86,7 @@
 </template>
 
 <script>
-import {encryptVpnUrl} from '@/logic';
+import {encryptVpnUrl, getBookmark, setBookmark} from '@/logic';
 
 export default {
   name: "PluginPanel",
@@ -95,19 +95,7 @@ export default {
       goUrl: '',
       bookmark: {
         editMode: false,
-        data: [{
-          name: '百度',
-          url: 'https://www.baidu.com/',
-        }, {
-          name: '百度',
-          url: 'https://www.baidu.com/',
-        }, {
-          name: '百度',
-          url: 'https://www.baidu.com/',
-        }, {
-          name: '百度',
-          url: 'https://www.baidu.com/',
-        },]
+        data: null,
       },
     }
   },
@@ -133,13 +121,20 @@ export default {
     },
 
     handleAddBookmark() {
-      // TODO 添加收藏
-      this.$message.success('添加成功');
+      this.$emit('onOpenAddBookmarkDialog');
     },
 
     handleRemoveBookmark(name) {
-      // TODO 删除收藏
-      this.$message.success('删除成功');
+      this.$confirm(`是否确认删除收藏的地址 “${name}”？`, '提示', {
+        confirmButtonText: '删除',
+        cancelButtonText: '取消',
+        type: 'danger',
+      }).then(() => {
+        // 删除
+        this.bookmark.data = this.bookmark.data.filter(item => item.name !== name);
+        setBookmark(this.bookmark.data);
+        this.$message.success('删除成功');
+      });
     },
 
     /*
@@ -147,7 +142,7 @@ export default {
      */
 
     loadBookmark() {
-      // TODO 获取收藏
+      this.bookmark.data = getBookmark();
     },
 
     /*

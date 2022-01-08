@@ -2,11 +2,12 @@
   <div>
     <div class="body" :class="{ 'body-hide': isHide }">
       <Header/>
-      <PluginPanel/>
+      <PluginPanel ref="panel" @onOpenAddBookmarkDialog="handleOpenAddBookmarkDialog"/>
       <div class="btn-toggle" @click="hide">
         <ArrowIcon/>
       </div>
     </div>
+    <AddBookmarkDialog ref="addBookmarkDialog" @onSuccess="handleAddBookmark"/>
   </div>
 </template>
 
@@ -14,10 +15,11 @@
 import Header from './Header.vue'
 import ArrowIcon from "@/icons/ArrowIcon.vue";
 import PluginPanel from "@/components/PluginPanel.vue";
+import AddBookmarkDialog from "@/components/AddBookmarkDialog.vue";
 
 export default {
   name: 'PluginDrawer',
-  components: {PluginPanel, ArrowIcon, Header},
+  components: {AddBookmarkDialog, PluginPanel, ArrowIcon, Header},
   data() {
     return {
       isHide: true,
@@ -27,6 +29,12 @@ export default {
     hide() {
       this.isHide = !this.isHide;
     },
+    handleOpenAddBookmarkDialog() {
+      this.$refs.addBookmarkDialog.open();
+    },
+    handleAddBookmark() {
+      this.$refs.panel.loadBookmark();
+    }
   },
 }
 </script>
