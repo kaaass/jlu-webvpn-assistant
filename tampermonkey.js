@@ -7,6 +7,7 @@
 // @license      MIT
 // @icon         https://webvpn.jlu.edu.cn/favicon.ico
 // @match        https://webvpn.jlu.edu.cn/
+// @match        https://webvpn.jlu.edu.cn/http*
 // @grant        GM_setValue
 // @grant        GM_getValue
 // @require      https://cdn.bootcdn.net/ajax/libs/vue/2.6.12/vue.min.js
