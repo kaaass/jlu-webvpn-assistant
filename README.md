@@ -16,7 +16,7 @@ npm run build
 
 ## Roadmap
 
-- [ ] 支持保存常用站点
+- [x] 支持保存常用站点
 
 ## Credit
 

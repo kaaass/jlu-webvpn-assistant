@@ -68,6 +68,12 @@
             </template>
           </el-table-column>
         </el-table>
+        <el-button
+            style="margin-top: 20px"
+            type="primary"
+            size="small"
+            v-if="!isVpnHall()"
+            @click="handleBookmarkCurrent()">收藏当前页面</el-button>
       </div>
       <!-- 底部提示 -->
       <div class="sub-container" style="margin-bottom: 10px;">
@@ -86,7 +92,7 @@
 </template>
 
 <script>
-import {encryptVpnUrl, getBookmark, setBookmark} from '@/logic';
+import {addBookmark, decryptVpnUrl, encryptVpnUrl, getBookmark, hasBookmark, removeBookmark} from '@/logic';
 
 export default {
   name: "PluginPanel",
@@ -124,6 +130,31 @@ export default {
       this.$emit('onOpenAddBookmarkDialog');
     },
 
+    handleBookmarkCurrent() {
+      const url = decryptVpnUrl(window.location.href);
+      const defName = document.title;
+      // 弹窗询问
+      this.$prompt('请输入收藏的名称', '提示', {
+        confirmButtonText: '添加',
+        cancelButtonText: '取消',
+        inputValue: defName,
+        inputValidator(value) {
+          if (!value) {
+            return '名称不能为空！';
+          }
+          if (hasBookmark(value)) {
+            return '已存在同名收藏！';
+          }
+          return true;
+        },
+      }).then(({ value }) => {
+        // 添加书签
+        addBookmark(value, url);
+        this.loadBookmark();
+        this.$message.success('添加成功');
+      });
+    },
+
     handleRemoveBookmark(name) {
       this.$confirm(`是否确认删除收藏的地址 “${name}”？`, '提示', {
         confirmButtonText: '删除',
@@ -131,8 +162,8 @@ export default {
         type: 'danger',
       }).then(() => {
         // 删除
-        this.bookmark.data = this.bookmark.data.filter(item => item.name !== name);
-        setBookmark(this.bookmark.data);
+        removeBookmark(name);
+        this.loadBookmark();
         this.$message.success('删除成功');
       });
     },
@@ -162,6 +193,14 @@ export default {
       } else {
         this.$message.error("未知错误");
       }
+    },
+
+    /**
+     * 是否在 VPN 主页
+     * @returns {boolean}
+     */
+    isVpnHall() {
+      return window.location.href === 'https://webvpn.jlu.edu.cn/';
     },
   }
 }

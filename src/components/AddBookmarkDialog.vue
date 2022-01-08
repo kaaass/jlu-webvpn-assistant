@@ -16,7 +16,7 @@
 </template>
 
 <script>
-import {getBookmark, setBookmark} from "@/logic";
+import {addBookmark, getBookmark, hasBookmark} from "@/logic";
 
 export default {
   name: "AddBookmarkDialog",
@@ -47,15 +47,14 @@ export default {
         return;
       }
       // 检查重复
-      if (bookmark.find(item => item.name === name)) {
+      if (hasBookmark(name)) {
         this.$message.error(`已经添加过 “${name}”`);
         return;
       }
       // 关闭对话框
       this.visible = false;
       // 保存收藏
-      bookmark.push({name, url});
-      setBookmark(bookmark);
+      addBookmark(name, url);
       this.$message.success('添加成功');
       this.$emit('onSuccess');
     }
