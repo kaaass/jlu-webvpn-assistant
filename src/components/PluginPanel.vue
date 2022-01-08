@@ -10,6 +10,7 @@
             class="input-with-select"
             @keyup.enter.native="handleJumpUrl()"
         >
+          <template slot="prepend" v-if="">http://</template>
           <el-button slot="append" icon="el-icon-arrow-right" @click="handleJumpUrl()"></el-button>
         </el-input>
       </div>
