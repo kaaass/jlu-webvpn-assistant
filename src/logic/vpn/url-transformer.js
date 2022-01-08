@@ -1,7 +1,7 @@
 import urlParse from 'url-parse';
 import * as encrypt from './encrypt';
-import _ from "lodash";
 import {getUrlType, makeUrlFromType} from "./url-helper";
+import arrayReduce from "lodash/_arrayReduce";
 
 const REGEX_PROTOCOL = /^(http|ws)s?$/;
 const REGEX_VPN_SCHEME = /^\/([^-\/]*)-?(\d+)?\/([^\/]*)(\/.*)?$/;
@@ -42,7 +42,7 @@ export const parse = (origin, baseURL, url, additionQuery = "", shouldEncrypt = 
     url.set("hostname", url.hostname.slice(0, -1));
   // 去除相对路径 ..
   url.set("pathname",
-    _.reduce(url.pathname.split("/"),
+    arrayReduce(url.pathname.split("/"),
       (acc, el) => {
         ".." === el ? acc.pop() : acc.push(el);
         return acc;
