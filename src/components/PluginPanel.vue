@@ -14,8 +14,61 @@
           <el-button slot="append" icon="el-icon-arrow-right" @click="handleJumpUrl()"></el-button>
         </el-input>
       </div>
-      <!-- 占位 -->
-      <div class="blank"></div>
+      <!-- 收藏 -->
+      <div class="sub-container">
+        <h3 class="sub-title">
+          收藏
+          <el-button
+              class="sub-title-btn"
+              :type="bookmark.editMode ? 'danger' : 'primary'"
+              :icon="bookmark.editMode ? 'el-icon-close' : 'el-icon-edit'"
+              @click="bookmark.editMode = !bookmark.editMode"
+              size="small"></el-button>
+          <el-button
+              class="sub-title-btn"
+              type="success"
+              icon="el-icon-plus"
+              @click="handleAddBookmark()"
+              size="small"></el-button>
+        </h3>
+        <el-table
+            :data="bookmark.data"
+            style="width: 100%"
+            :show-header="false"
+        >
+          <el-table-column
+              prop="name"
+              label="名称"
+              width="100">
+          </el-table-column>
+          <el-table-column
+              prop="url"
+              label="地址">
+            <template slot-scope="scope">
+              <el-button
+                  @click="jumpTo(scope.row.url)"
+                  type="text"
+                  size="small"
+                  style="float: right">
+                {{ scope.row.url }}
+              </el-button>
+            </template>
+          </el-table-column>
+          <el-table-column
+              fixed="right"
+              label="操作"
+              width="65"
+              v-if="bookmark.editMode">
+            <template slot-scope="scope">
+              <el-button
+                  type="danger"
+                  size="mini"
+                  icon="el-icon-delete"
+                  @click="handleRemoveBookmark(scope.row.name)"></el-button>
+            </template>
+          </el-table-column>
+        </el-table>
+      </div>
       <!-- 底部提示 -->
       <div class="sub-container" style="margin-bottom: 10px;">
         <el-divider>
@@ -26,6 +79,8 @@
           </el-tooltip>
         </el-divider>
       </div>
+      <!-- 占位 -->
+      <div class="blank"></div>
     </el-scrollbar>
   </div>
 </template>
@@ -38,10 +93,35 @@ export default {
   data() {
     return {
       goUrl: '',
+      bookmark: {
+        editMode: false,
+        data: [{
+          name: '百度',
+          url: 'https://www.baidu.com/',
+        }, {
+          name: '百度',
+          url: 'https://www.baidu.com/',
+        }, {
+          name: '百度',
+          url: 'https://www.baidu.com/',
+        }, {
+          name: '百度',
+          url: 'https://www.baidu.com/',
+        },]
+      },
     }
   },
 
+  mounted() {
+    this.loadBookmark();
+  },
+
   methods: {
+
+    /*
+     * 事件处理
+     */
+
     handleJumpUrl() {
       // 空检查
       if (!this.goUrl) {
@@ -49,7 +129,37 @@ export default {
         return;
       }
       // 编码
-      const encryptedUrl = encryptVpnUrl(this.goUrl);
+      this.jumpTo(this.goUrl);
+    },
+
+    handleAddBookmark() {
+      // TODO 添加收藏
+      this.$message.success('添加成功');
+    },
+
+    handleRemoveBookmark(name) {
+      // TODO 删除收藏
+      this.$message.success('删除成功');
+    },
+
+    /*
+     * 数据
+     */
+
+    loadBookmark() {
+      // TODO 获取收藏
+    },
+
+    /*
+     * Utility
+     */
+
+    /**
+     * VPN 跳转到指定地址
+     * @param url
+     */
+    jumpTo(url) {
+      const encryptedUrl = encryptVpnUrl(url);
       if (encryptedUrl) {
         this.goUrl = '';
         window.open(encryptedUrl);
@@ -83,10 +193,16 @@ export default {
 }
 
 .sub-container {
-  margin-top: 20px;
+  margin-bottom: 30px;
 }
 
 .sub-title {
   margin-bottom: 15px;
+}
+
+.sub-title-btn {
+  float: right;
+  padding: 4px 10px;
+  margin: 0 3px;
 }
 </style>

@@ -46,13 +46,13 @@ export default {
 
 .btn-toggle {
   transition: all 0.5s;
-  border-radius: 30px 0 0 30px;
+  border-radius: 0 30px 30px 0;
   width: 30px;
   height: 60px;
   background-color: rgb(0, 120, 212);
   cursor: pointer;
   position: absolute;
-  right: 0;
+  right: -30px;
   top: 50%;
   transform: translateY(-50%);
   text-align: center;
@@ -73,9 +73,6 @@ export default {
   box-shadow: 2px 3px 3px 0 rgba(0, 0, 0, .0);
 
   .btn-toggle {
-    border-radius: 0 30px 30px 0;
-    right: -30px;
-
     svg {
       transform: rotate(180deg);
     }
