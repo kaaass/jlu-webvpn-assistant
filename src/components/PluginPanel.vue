@@ -1,6 +1,7 @@
 <template>
   <div class="app-container">
     <el-scrollbar>
+      <!-- 直接跳转 -->
       <div class="sub-container">
         <h3 class="sub-title">直接跳转</h3>
         <el-input
@@ -12,7 +13,18 @@
           <el-button slot="append" icon="el-icon-arrow-right" @click="handleJumpUrl()"></el-button>
         </el-input>
       </div>
+      <!-- 占位 -->
       <div class="blank"></div>
+      <!-- 底部提示 -->
+      <div class="sub-container" style="margin-bottom: 10px;">
+        <el-divider>
+          <el-tooltip class="item" effect="dark" content="Star/Fork me on GitHub" placement="top">
+            <el-link href="https://github.com/kaaass/jlu-webvpn-assistant">
+              <i class="el-icon-umbrella"></i>
+            </el-link>
+          </el-tooltip>
+        </el-divider>
+      </div>
     </el-scrollbar>
   </div>
 </template>
@@ -66,7 +78,7 @@ export default {
 }
 
 .blank {
-  height: 100px;
+  height: 50px;
 }
 
 .sub-container {
