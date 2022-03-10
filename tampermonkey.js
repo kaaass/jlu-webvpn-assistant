@@ -10,7 +10,7 @@
 // @match        https://webvpn.jlu.edu.cn/http*
 // @grant        GM_setValue
 // @grant        GM_getValue
-// @require      https://cdn.bootcdn.net/ajax/libs/vue/2.6.12/vue.min.js
-// @require      https://unpkg.com/element-ui@2.14.1/lib/index.js
+// @require      https://cdn.staticfile.org/vue/2.6.12/vue.min.js
+// @require      https://cdn.staticfile.org/element-ui/2.14.1/index.min.js
 // @noframes
 // ==/UserScript==
