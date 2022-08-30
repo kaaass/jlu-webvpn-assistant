@@ -1,6 +1,6 @@
 
-export const vpnCryptIv = 'wrdvpnisthebest!';
+export const vpnCryptIv = 'jluvpnisthegood!';
 
-export const vpnCryptKey = 'wrdvpnisthebest!';
+export const vpnCryptKey = 'jluvpnisthegood!';
 
-export const vpnHost = 'https://webvpn.jlu.edu.cn';
+export const vpnHost = 'https://vpn.jlu.edu.cn';
