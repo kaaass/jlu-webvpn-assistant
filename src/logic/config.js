@@ -1,6 +1,6 @@
 
-export const vpnCryptIv = 'jluvpnisthegood!';
+export const vpnCryptIv = 'Didida1127Didida';
 
-export const vpnCryptKey = 'jluvpnisthegood!';
+export const vpnCryptKey = 'Didida1127Didida';
 
 export const vpnHost = 'https://vpn.jlu.edu.cn';
