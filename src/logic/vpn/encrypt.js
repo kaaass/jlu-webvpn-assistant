@@ -1,13 +1,14 @@
 import * as aesHelper from './aes-helper.js';
-import {vpnCryptIv, vpnCryptKey} from "@/logic/config";
+import {getVpnCredentials} from '@/logic/vpn/credentials';
 
 /**
  * 通用加密
  * @param data
  * @returns {string}
  */
-export const parse = (data) => {
-  return aesHelper.encrypt(data, vpnCryptKey, vpnCryptIv);
+export const parse = async (data) => {
+  const credentials = await getVpnCredentials();
+  return aesHelper.encrypt(data, credentials.key, credentials.iv);
 };
 
 /**
@@ -15,6 +16,7 @@ export const parse = (data) => {
  * @param data
  * @returns {string|*}
  */
-export const unparse = (data) => {
-  return aesHelper.decrypt(data, vpnCryptKey);
+export const unparse = async (data) => {
+  const credentials = await getVpnCredentials();
+  return aesHelper.decrypt(data, credentials.key);
 };

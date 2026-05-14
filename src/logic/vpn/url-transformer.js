@@ -15,7 +15,7 @@ const REGEX_VPN_SCHEME = /^\/([^-\/]*)-?(\d+)?\/([^\/]*)(\/.*)?$/;
  * @param shouldEncrypt 是否加密
  * @returns {*|string|string}
  */
-export const parse = (origin, baseURL, url, additionQuery = "", shouldEncrypt = false) => {
+export const parse = async (origin, baseURL, url, additionQuery = "", shouldEncrypt = false) => {
   // url 合并附加参数
   if (additionQuery) {
     const queryIndex = url.indexOf("?");
@@ -52,7 +52,7 @@ export const parse = (origin, baseURL, url, additionQuery = "", shouldEncrypt = 
   const port = url.port && "-" + url.port;
   // 域名加密
   if (shouldEncrypt) {
-    url.set("hostname", encrypt.parse(url["hostname"]));
+    url.set("hostname", await encrypt.parse(url["hostname"]));
   }
   // 拼接
   url = origin + "/"
@@ -69,7 +69,7 @@ export const parse = (origin, baseURL, url, additionQuery = "", shouldEncrypt = 
  * @param shouldEncrypt 是否加密
  * @returns {*|string}
  */
-export const unparse = (origin, url, shouldEncrypt) => {
+export const unparse = async (origin, url, shouldEncrypt) => {
   // 去除 vpn 相关参数
   url = url.replace(/\?vpn-12-o[12]-[^&#]*&/, "?")
     .replace(/\?vpn-12-o[12]-[^&#]*/, "")
@@ -92,7 +92,7 @@ export const unparse = (origin, url, shouldEncrypt) => {
   // 拼接结果
   let [protocol, port, hostname, pathname] = urlParts.slice(1);
   if (shouldEncrypt) {
-    hostname = encrypt.unparse(hostname);
+    hostname = await encrypt.unparse(hostname);
   }
   url.set("hostname", hostname);
   url.set("protocol", protocol);
