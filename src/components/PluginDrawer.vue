@@ -1,7 +1,10 @@
 <template>
   <div>
     <div class="body" :class="{ 'body-hide': isHide }">
-      <Header/>
+      <Header
+          :credential-tip="credentialTip"
+          :credential-tip-type="credentialTipType"
+      />
       <PluginPanel ref="panel" @onOpenAddBookmarkDialog="handleOpenAddBookmarkDialog"/>
       <div class="btn-toggle" @click="hide">
         <ArrowIcon/>
@@ -16,6 +19,7 @@ import Header from './Header.vue'
 import ArrowIcon from "@/icons/ArrowIcon.vue";
 import PluginPanel from "@/components/PluginPanel.vue";
 import AddBookmarkDialog from "@/components/AddBookmarkDialog.vue";
+import {getVpnCredentials} from '@/logic/vpn/credentials';
 
 export default {
   name: 'PluginDrawer',
@@ -23,11 +27,49 @@ export default {
   data() {
     return {
       isHide: true,
+      credentialTip: '',
+      credentialTipType: 'info',
+      credentialTipTimer: null,
     }
   },
   methods: {
-    hide() {
+    clearCredentialTipTimer() {
+      if (this.credentialTipTimer) {
+        clearTimeout(this.credentialTipTimer);
+        this.credentialTipTimer = null;
+      }
+    },
+
+    showCredentialTip(message, type = 'info') {
+      this.clearCredentialTipTimer();
+      this.credentialTip = message;
+      this.credentialTipType = type;
+    },
+
+    async refreshVpnCredentials() {
+      try {
+        const credentials = await getVpnCredentials();
+        if (credentials.status === 'cached') {
+          this.showCredentialTip('VPN 凭据未过期，继续使用本地缓存。', 'success');
+          return;
+        }
+        if (credentials.status === 'fresh') {
+          this.showCredentialTip('VPN 凭据已刷新。', 'success');
+          return;
+        }
+        if (credentials.status === 'stale') {
+          this.showCredentialTip('VPN 凭据请求超时，已回退使用旧缓存。', 'warning');
+        }
+      } catch (error) {
+        this.showCredentialTip('VPN 凭据获取失败，请稍后重试。', 'error');
+      }
+    },
+
+    async hide() {
       this.isHide = !this.isHide;
+      if (!this.isHide) {
+        await this.refreshVpnCredentials();
+      }
     },
     handleOpenAddBookmarkDialog() {
       this.$refs.addBookmarkDialog.open();

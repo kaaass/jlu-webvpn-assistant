@@ -1,6 +1,6 @@
 {
   "name": "jlu-webvpn-assistant",
-  "version": "1.1.4",
+  "version": "1.1.5",
   "description": "A Tampermonkey script for better using JLU WebVPN",
   "author": "KAAAsS",
   "private": true,
@@ -13,24 +13,23 @@
     "axios"
   ],
   "scripts": {
-    "dev": "dotenv -e .env.dev -- webpack-dev-server --open --config webpack.dev.js",
-    "build": "dotenv -e .env -- webpack --config webpack.prod.js && dotenv -e .env -- node build.js",
-    "test": "dotenv -e .env.test -- webpack --config webpack.test.js --watch"
+    "dev": "node ./scripts/run-with-env.js .env.dev webpack-dev-server --open --config webpack.dev.js",
+    "build": "node ./scripts/run-with-env.js .env webpack --config webpack.prod.js && node ./scripts/run-with-env.js .env node build.js",
+    "test": "node ./scripts/run-with-env.js .env.test webpack --config webpack.test.js --watch"
   },
   "license": "MIT",
   "devDependencies": {
     "clean-webpack-plugin": "^3.0.0",
     "css-loader": "^5.0.1",
-    "dotenv-cli": "^4.0.0",
     "file-loader": "^6.2.0",
     "html-webpack-plugin": "^4.5.0",
-    "node-sass": "^7.0.1",
+    "sass": "^1.77.8",
     "sass-loader": "^12.6.0",
     "style-loader": "^2.0.0",
     "vue-loader": "^15.9.5",
     "vue-template-compiler": "^2.6.12",
     "webpack": "^5.71.0",
-    "webpack-cli": "^3.3.11",
+    "webpack-cli": "^5.1.4",
     "webpack-dev-server": "^4.7.4",
     "webpack-merge": "^5.4.0"
   },

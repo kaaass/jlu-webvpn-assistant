@@ -116,43 +116,47 @@ export default {
      * 事件处理
      */
 
-    handleJumpUrl() {
+    async handleJumpUrl() {
       // 空检查
       if (!this.goUrl) {
         this.$message.error('请输入要跳转的链接！');
         return;
       }
       // 编码
-      this.jumpTo(this.goUrl);
+      await this.jumpTo(this.goUrl);
     },
 
     handleAddBookmark() {
       this.$emit('onOpenAddBookmarkDialog');
     },
 
-    handleBookmarkCurrent() {
-      const url = decryptVpnUrl(window.location.href);
-      const defName = document.title;
-      // 弹窗询问
-      this.$prompt('请输入收藏的名称', '提示', {
-        confirmButtonText: '添加',
-        cancelButtonText: '取消',
-        inputValue: defName,
-        inputValidator(value) {
-          if (!value) {
-            return '名称不能为空！';
-          }
-          if (hasBookmark(value)) {
-            return '已存在同名收藏！';
-          }
-          return true;
-        },
-      }).then(({ value }) => {
-        // 添加书签
-        addBookmark(value, url);
-        this.loadBookmark();
-        this.$message.success('添加成功');
-      });
+    async handleBookmarkCurrent() {
+      try {
+        const url = await decryptVpnUrl(window.location.href);
+        const defName = document.title;
+        // 弹窗询问
+        this.$prompt('请输入收藏的名称', '提示', {
+          confirmButtonText: '添加',
+          cancelButtonText: '取消',
+          inputValue: defName,
+          inputValidator(value) {
+            if (!value) {
+              return '名称不能为空！';
+            }
+            if (hasBookmark(value)) {
+              return '已存在同名收藏！';
+            }
+            return true;
+          },
+        }).then(({ value }) => {
+          // 添加书签
+          addBookmark(value, url);
+          this.loadBookmark();
+          this.$message.success('添加成功');
+        });
+      } catch (error) {
+        this.$message.error('获取 VPN 凭据失败，无法收藏当前页面');
+      }
     },
 
     handleRemoveBookmark(name) {
@@ -184,14 +188,26 @@ export default {
      * VPN 跳转到指定地址
      * @param url
      */
-    jumpTo(url) {
-      const encryptedUrl = encryptVpnUrl(url);
-      if (encryptedUrl) {
-        this.goUrl = '';
-        window.open(encryptedUrl);
-        this.$message.success("正在跳转...");
-      } else {
-        this.$message.error("未知错误");
+    async jumpTo(url) {
+      const targetWindow = window.open('', '_blank');
+      if (!targetWindow) {
+        this.$message.error('浏览器拦截了新窗口，请手动允许后重试');
+        return;
+      }
+
+      try {
+        const encryptedUrl = await encryptVpnUrl(url);
+        if (encryptedUrl) {
+          this.goUrl = '';
+          targetWindow.location.href = encryptedUrl;
+          this.$message.success("正在跳转...");
+        } else {
+          targetWindow.close();
+          this.$message.error("未知错误");
+        }
+      } catch (error) {
+        targetWindow.close();
+        this.$message.error("获取 VPN 凭据失败，无法跳转");
       }
     },
 

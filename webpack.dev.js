@@ -10,7 +10,10 @@ module.exports = merge(common(), {
   devtool: 'inline-source-map',
   devServer: {
     publicPath: '/',
-    contentBase: path.join(__dirname, 'dist'),
+    static: {
+      directory: path.join(__dirname, 'dist'),
+      publicPath: '/',
+    },
     hot: true // hot reload
   },
   plugins: [

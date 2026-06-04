@@ -7,11 +7,11 @@ import {getObject, setObject} from "@/logic/storage";
  * @param url
  * @returns {*|string}
  */
-export const encryptVpnUrl = (url) => {
+export const encryptVpnUrl = async (url) => {
   if (url.indexOf('://') === -1) {
     url = 'http://' + url;
   }
-  return parse(vpnHost, '', url, '', true);
+  return await parse(vpnHost, '', url, '', true);
 };
 
 /**
@@ -19,8 +19,8 @@ export const encryptVpnUrl = (url) => {
  * @param url
  * @returns {*|string}
  */
-export const decryptVpnUrl = (url) => {
-  return unparse(vpnHost, url, true);
+export const decryptVpnUrl = async (url) => {
+  return await unparse(vpnHost, url, true);
 };
 
 const KEY_BOOKMARK = 'bookmark';
